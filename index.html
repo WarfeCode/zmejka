@@ -1,13 +1,15 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('gameCanvas'); // Получаем элемент canvas
+const ctx = canvas.getContext('2d'); // Получаем контекст для рисования
 const box = 20; // Размер одной клетки
 let score = 0; // Очки
 let snake = [{ x: box * 5, y: box * 5 }]; // Начальная позиция змейки
 let direction = 'RIGHT'; // Начальное направление
 let food = spawnFood(); // Создаем первую еду
 
-document.addEventListener('keydown', changeDirection); // Установка обработчика событий на нажатие клавиш
+// Установка обработчика событий на нажатие клавиш
+document.addEventListener('keydown', changeDirection); 
 
+// Функция отрисовки игры
 function drawGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Очистка экрана
 
@@ -27,6 +29,7 @@ function drawGame() {
     const headX = snake[0].x;
     const headY = snake[0].y;
 
+    // Определяем новое положение головы змейки
     if (direction === 'LEFT') snake.unshift({ x: headX - box, y: headY });
     if (direction === 'UP') snake.unshift({ x: headX, y: headY - box });
     if (direction === 'RIGHT') snake.unshift({ x: headX + box, y: headY });
@@ -34,7 +37,7 @@ function drawGame() {
 
     // Проверяем, съела ли змейка еду
     if (snake[0].x === food.x && snake[0].y === food.y) {
-        score++;
+        score++; // Увеличиваем счет
         document.getElementById('score').innerText = "Очки: " + score; // Обновляем очки
         food = spawnFood(); // Создаем новую еду
     } else {
@@ -48,12 +51,14 @@ function drawGame() {
     }
 }
 
+// Функция для создания еды
 function spawnFood() {
     const foodX = Math.floor(Math.random() * (canvas.width / box)) * box;
     const foodY = Math.floor(Math.random() * (canvas.height / box)) * box;
     return { x: foodX, y: foodY };
 }
 
+// Функция для изменения направления змейки
 function changeDirection(event) {
     if (event.keyCode === 37 && direction !== 'RIGHT') direction = 'LEFT'; // Влево
     if (event.keyCode === 38 && direction !== 'DOWN') direction = 'UP'; // Вверх
@@ -61,6 +66,7 @@ function changeDirection(event) {
     if (event.keyCode === 40 && direction !== 'UP') direction = 'DOWN'; // Вниз
 }
 
+// Функция проверки столкновения
 function collision() {
     const head = snake[0];
     if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) return true; // Удар о стену
@@ -70,5 +76,5 @@ function collision() {
     return false;
 }
 
+// Запуск игры
 const game = setInterval(drawGame, 100); // Обновление игры каждые 100 мс
-
